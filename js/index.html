@@ -17,8 +17,8 @@
 <script>
  document.querySelector("#post-form").addEventListener("submit",(e)=>{
     e.preventDefault();
-    if (posstText !== "") {
-        const postText = document.querySelector("#write").value
+    const postText = document.querySelector("#write").value
+    if (postText !== "") {
         const post = document.createElement("li");
         post.innerText = postText;
         document.querySelector("#board").appendChild(post)
