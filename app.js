@@ -1,35 +1,39 @@
-//https://crudcrud.com/api/de38a51c3d724718938a333e22a17f82
-
-// fetch("https://crudcrud.com/api/de38a51c3d724718938a333e22a17f82/post").then((res)=>{
-// return res.json()
-// }).then((json)=>{
-//     console.log(json)
-// })
-
-// async function init(){}
-const post_url = "https://crudcrud.com/api/44ba9cee14514225be3d7a4248fe1569/post"
+const post_url = "http://crud.tlol.me/wonbeom/post";
+let pagePointer = 0
 const init = async ()=>{
     const res = await fetch(post_url);
     const json = await res.json();
-    console.log(json);
-    json.forEach(post => {
+    const createPost = (post) => {
         const postLi = document.createElement("li");
-        postLi.innerText = post.title;
+        postLi.classList.add("post-container");
         document.querySelector("#board").appendChild(postLi);
+
+        const postTitle = document.createElement("span");
+        postTitle.innerText = post.title;
+        postTitle.classList.add("bold-text");
+        postLi.appendChild(postTitle);
+
         const contentDiv = document.createElement("div");
         contentDiv.innerText = post.content;
         postLi.appendChild(contentDiv);
         contentDiv.style.display = 'none';
-        
         postLi.addEventListener('click',()=>{
             if (contentDiv.style.display == 'block') {
                 contentDiv.style.display = 'none';
             }else{
                 contentDiv.style.display = 'block';
             }
-        });
-    });
+        }); 
+    }
+    json.slice(0,5).forEach(createPost);
+    pagePointer+=5
+    document.querySelector("#post-more").addEventListener("click",()=>{
+        const prevPointer = pagePointer;
+        pagePointer = pagePointer+5
+        json.slice(prevPointer,pagePointer).forEach(createPost)
+    })
 }
+
 const write = async (data)=>{
     const res = await fetch(post_url,{
         method:"POST",
@@ -62,6 +66,6 @@ document.querySelector("#toggle-write").addEventListener("click",()=>{
     }else{
         document.querySelector("#post-form").style.display = 'block'
     }
-})
+});
 
 init()
